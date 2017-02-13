@@ -10,17 +10,18 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/sweetalert.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
   <nav class="white" role="navigation">
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo">League of reports</a>
       <ul class="right hide-on-med-and-down">
-        <li><a class="waves-effect waves-light btn-large red">Get report!<i class="material-icons right">report_problem</i></a></li>
+        <li><a id="button_report_1" class="waves-effect waves-light btn-large red">Get report!<i class="material-icons right">report_problem</i></a></li>
       </ul>
 
       <ul id="nav-mobile" class="side-nav">
-        <li><a class="waves-effect waves-light btn-large red">Get report!<i class="material-icons right">report_problem</i></a></li>
+        <li><a id="button_report_2" class="waves-effect waves-light btn-large red">Get report!<i class="material-icons right">report_problem</i></a></li>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
@@ -35,14 +36,14 @@
           <div class="row">
             <div class="col s12">
               <div class="row">
-                <form class="" action="index.html" method="post">
+                <form class="" action="index.php" method="get">
                   <div class="input-field col s12">
                     <div class="input-field col s12">
-                      <input id="autocomplete-input" type="text" class="validate autocomplete white light-blue-text z-depth-3">
+                      <input placeholder="Summoner's name" id="autocomplete-input" name="summoner" type="text" class="validate autocomplete white light-blue-text z-depth-3">
                     </div>
                   </div>
                   <div class="col offset-s6 s6">
-                    <button class="btn-large waves-effect waves-light light-blue z-depth-3" type="submit" name="action">Get search
+                    <button class="btn-large waves-effect waves-light light-blue z-depth-3" type="submit">Get search
                       <i class="material-icons right">search</i>
                     </button>
                   </div>
@@ -57,33 +58,38 @@
   </div>
   <div class="container">
     <div class="section">
+      <div class="row">
+        <?php
+        if(isset($_GET['summoner'])) {
+          $summoner = $_GET['summoner'];
+          echo "<h1 class='blue-text text-lighten-2'>".$summoner."</h1>";
+        }
+         ?>
+      </div>
 
       <!--   Icon Section   -->
       <div class="row">
         <div class="col s12 m4">
           <div class="icon-block">
-            <h2 class="center brown-text"><i class="material-icons">flash_on</i></h2>
-            <h5 class="center">Speeds up development</h5>
-
-            <p class="light">We did most of the heavy lifting for you to provide a default stylings that incorporate our custom components. Additionally, we refined animations and transitions to provide a smoother experience for developers.</p>
+            <h2 class="center blue-text text-lighten-2"><i class="material-icons">flash_on</i></h2>
+            <h5 class="center">Recherche rapide</h5>
+            <p class="light">Faite des recherches rapide sur vos mates pendants la phase de draft</p>
           </div>
         </div>
 
         <div class="col s12 m4">
           <div class="icon-block">
-            <h2 class="center brown-text"><i class="material-icons">group</i></h2>
-            <h5 class="center">User Experience Focused</h5>
-
-            <p class="light">By utilizing elements and principles of Material Design, we were able to create a framework that incorporates components and animations that provide more feedback to users. Additionally, a single underlying responsive system across all platforms allow for a more unified user experience.</p>
+            <h2 class="center blue-text text-lighten-2"><i class="material-icons">trending_up</i></h2>
+            <h5 class="center">Perdez plutot 3 pl</h5>
+            <p class="light">BLABLABLA</p>
           </div>
         </div>
 
         <div class="col s12 m4">
           <div class="icon-block">
-            <h2 class="center brown-text"><i class="material-icons">settings</i></h2>
-            <h5 class="center">Easy to work with</h5>
-
-            <p class="light">We have provided detailed documentation as well as specific code examples to help new users get started. We are also always open to feedback and can answer any questions a user may have about Materialize.</p>
+            <h2 class="center blue-text text-lighten-2"><i class="material-icons">account_balance</i></h2>
+            <h5 class="center">Justice blabla</h5>
+            <p class="light">blablabla</p>
           </div>
         </div>
       </div>
@@ -107,7 +113,7 @@
     <div class="container">
       <div class="row">
         <div class="col l6 s12">
-          <h5 class="white-text">Projet</h5>
+          <h5 class="white-text">What is League of reports?</h5>
           <p class="grey-text text-lighten-4">BLABLABLABLABLA</p>
         </div>
       </div>
@@ -121,6 +127,7 @@
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="js/materialize.min.js"></script>
+  <script src="js/sweetalert.min.js"></script>
   <script src="js/init.js"></script>
   </body>
 </html>
