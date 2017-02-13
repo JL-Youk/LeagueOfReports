@@ -55,3 +55,8 @@ p {
 footer.page-footer {
   margin: 0;
 }
+.autocomplete{
+  font-size: 20px!important;
+  padding-top: 4px!important;
+  padding-bottom: 4px!important;
+}
