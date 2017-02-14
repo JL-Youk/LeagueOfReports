@@ -19,9 +19,7 @@
 </head>
 <body>
   <?php
-  $user = "root";
-  $pass = "root";
-  $dbh = new PDO('mysql:host=localhost;dbname=lors', $user, $pass);
+  include_once 'config.php';
    ?>
   <nav class="white" role="navigation">
     <div class="nav-wrapper container">
@@ -216,15 +214,23 @@
       </div>
     </div>
   </footer>
-  <?php
-  $stmt = $dbh->prepare("SELECT invocateurs FROM lors_invocateur_reported");
-  if ($stmt->execute()) {
-    while ($row = $stmt->fetch()) {
-      echo "'".$row['invocateurs']."': null,";
-    }
-  }
-   ?>
-
+<script type="text/javascript">
+$(document).ready(function($) {
+  $('input.autocomplete').autocomplete({
+    data: {
+      <?php
+      $stmt = $dbh->prepare("SELECT invocateurs FROM lors_invocateur_reported");
+      if ($stmt->execute()) {
+        while ($row = $stmt->fetch()) {
+          echo "'".$row['invocateurs']."': null,";
+        }
+      }
+       ?>
+    },
+    limit: 4, // The max amount of results that can be shown at once. Default: Infinity.
+  });
+});
+</script>
   <?php
   $dbh = null;
    ?>
