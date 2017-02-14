@@ -11,22 +11,114 @@
   <link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/sweetalert.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.min.js"></script>
+  <script src="js/sweetalert.min.js"></script>
+  <script src="js/init.js"></script>
 </head>
 <body>
+  <?php
+  $user = "root";
+  $pass = "root";
+  $dbh = new PDO('mysql:host=localhost;dbname=lors', $user, $pass);
+   ?>
   <nav class="white" role="navigation">
     <div class="nav-wrapper container">
-      <a id="logo-container" href="#" class="brand-logo">League of reports</a>
+      <a id="logo-container" href="#" class="brand-logo">LeagueOfReports.eu</a>
       <ul class="right hide-on-med-and-down">
         <li><a id="button_report_1" class="waves-effect waves-light btn-large red">Get report!<i class="material-icons right">report_problem</i></a></li>
       </ul>
-
       <ul id="nav-mobile" class="side-nav">
         <li><a id="button_report_2" class="waves-effect waves-light btn-large red">Get report!<i class="material-icons right">report_problem</i></a></li>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
+  <?php
+  if(isset($_POST['report_summoner'])) {
+    $report_summoner = htmlspecialchars($_POST["report_summoner"], ENT_QUOTES);
+    if(isset($_POST['report_text'])) {
+      $report_text = htmlspecialchars($_POST["report_text"], ENT_QUOTES);
+    }
+    else {
+      $report_text = "";
+    }
+    $stmt = $dbh->prepare("INSERT INTO lors_reports (invocateurs, textes) VALUES (:invocateur, :texte)");
+    $stmt->bindParam(':invocateur', $invocateur_get_report);
+    $stmt->bindParam(':texte', $texte_get_report);
+    // insertion d'une ligne
+    $invocateur_get_report = $report_summoner;
+    $texte_get_report = $report_text;
+    $stmt->execute();
+    // on cherche dans le 2eme table
+    $stmt = $dbh->prepare("SELECT invocateurs FROM lors_invocateur_reported WHERE invocateurs = ?");
+    if ($stmt->execute(array($invocateur_get_report))) {
+      $existant = false;
+      while ($row = $stmt->fetch()) {
+        $existant = true;
+      }
+      if ($existant) {
 
+      }
+      else {
+        $stmt = $dbh->prepare("INSERT INTO lors_invocateur_reported (invocateurs, nb_report) VALUES (:invocateur, :nb)");
+        $stmt->bindParam(':invocateur', $invocateur_get_report);
+        $stmt->bindParam(':nb', $nb_get_report);
+        $invocateur_get_report = $report_summoner;
+        $nb_get_report = 1;
+        $stmt->execute();
+      }
+    }
+    ?>
+    <script type="text/javascript">
+      swal({
+        title: "Report bien enregistré!",
+        text: "Merci de ta contribution",
+        timer: 4000,
+        imageUrl: "images/reported.gif"
+      });
+    </script>
+    <?php
+  }
+  else {
+    // pas de report
+  }
+   ?>
+  <div class="container" id="formulaire_report">
+    <div class="section">
+      <div class="row">
+        <h4>Bienvenue dans le formulaire de report</h4>
+        <form class="" action="index.php" method="post" enctype='multipart/form-data'>
+          <div class="input-field col m6 s12">
+           <input id="name" type="text" class="validate" name="report_summoner" required>
+           <label for="name" data-error="wrong" data-success="right">*Summoner</label>
+         </div>
+         <!-- <div class="file-field input-field col m6 s12">
+          <div class="btn">
+            <span>Image</span>
+            <input id="image_offre" name="report_screen" type="file">
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" name="report_text" type="text">
+          </div>
+        </div> -->
+         <div class="input-field col s12">
+           <textarea id="textarea1" class="materialize-textarea"></textarea>
+           <label for="textarea1">texte</label>
+         </div>
+         <div class="col s12">
+           Seul le nom de l'invocateur est obligatoire.
+         </div>
+         <div class="col offset-m9 m3 s12">
+           <button class="btn-large waves-effect waves-light teal z-depth-3 right-align" type="submit">Reported!
+             <i class="material-icons right">send</i>
+           </button>
+         </div>
+        </form>
+      </div>
+    </div>
+  </div>
   <div id="index-banner" class="parallax-container">
     <div class="section no-pad-bot">
       <div class="container">
@@ -56,7 +148,7 @@
     </div>
     <div class="parallax"><img src="images/trundel_voli.jpg" alt="Unsplashed background img 1"></div>
   </div>
-  <div class="container">
+  <div class="container" id="info_site">
     <div class="section">
       <div class="row">
         <?php
@@ -124,10 +216,17 @@
       </div>
     </div>
   </footer>
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize.min.js"></script>
-  <script src="js/sweetalert.min.js"></script>
-  <script src="js/init.js"></script>
+  <?php
+  $stmt = $dbh->prepare("SELECT invocateurs FROM lors_invocateur_reported");
+  if ($stmt->execute()) {
+    while ($row = $stmt->fetch()) {
+      echo "'".$row['invocateurs']."': null,";
+    }
+  }
+   ?>
+
+  <?php
+  $dbh = null;
+   ?>
   </body>
 </html>
